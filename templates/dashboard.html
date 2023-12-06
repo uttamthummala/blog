@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Blog Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .article-form {
+            display: none;
+        }
+    </style>
+    <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+
+</head>
+<body>
+    {% if messages %}
+    <div
+      class="alert alert-dismissible {% if messages.tags %}{{ messages.tags }}{% endif %}" style="background-color: rgb(116, 184, 224);"
+    >
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      {% for message in messages %} {{ message }} {% endfor %}
+    </div>
+    {% endif %}
+<div class="container mt-5">
+    <h2>Welcome to the Blog  <a href="{% url 'dashboard' %}">Dashboard!</a></h2>
+
+
+    <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#articleModal" style="margin-bottom: 5px;">Add a New Article</button>
+    <a href="{% url 'logout' %}" class="btn btn-danger" style="flex-direction: column;     position: absolute;
+    right: 20%;">Logout</a>
+
+<form method="get" action="{% url 'dashboard' %}">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="filterOption">Filter by:</label>
+            <select class="form-control" id="filterOption" name="filter_option">
+                <option value="title" {% if filter_option == 'title' %}selected{% endif %}>Title</option>
+                <option value="content" {% if filter_option == 'content' %}selected{% endif %}>Content</option>
+                <option value="tags" {% if filter_option == 'tags' %}selected{% endif %}>Tags</option>
+                <option value="author" {% if filter_option == 'author' %}selected{% endif %}>Author</option>
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="query">Search:</label>
+            <input type="text" class="form-control" id="query" name="q" value="{{ query }}">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Apply Filters</button>
+</form>
+
+
+    {% if articles %}
+        <ul class="list-group mt-3">
+            {% for article in articles %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <p class="card-text">{{ article.content|safe }}</p>
+                <p class="card-text">Author: {{ article.author.username }}</p>
+                <p class="card-text">Publication Date: {{ article.publication_date }}</p>
+                <p class="card-text">Tags: {{article.tags}}</p>
+                <a href="{% url 'article_detail' article.id %}" class="btn btn-primary">Read More</a>
+            </div>
+        </div>
+    {% endfor %}
+        </ul>
+
+     
+        {% else %}
+        <p>No articles available.</p>
+    {% endif %}
+    <div class="mt-3">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+    
+                {% if articles.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" tabindex="-1" aria-disabled="true">&laquo; first</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ articles.previous_page_number }}">previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo; first</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">previous</span>
+                    </li>
+                {% endif %}
+    
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ articles.number }} of {{ articles.paginator.num_pages }}</span>
+                </li>
+    
+                {% if articles.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ articles.next_page_number }}">next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ articles.paginator.num_pages }}">last &raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">next</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">last &raquo;</span>
+                    </li>
+                {% endif %}
+    
+            </ul>
+        </nav>
+    </div>
+    </div>
+
+    <div class="modal" id="articleModal" tabindex="-1" role="dialog" aria-labelledby="articleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="articleModalLabel">Add a New Article</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'dashboard' %}" class="form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="id_title">Title</label>
+                            <input type="text" id="id_title" name="title" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_content">Content</label>
+                            <textarea id="id_content" name="content" class="form-control ckeditor"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_tags">Tags</label>
+                            <input type="text" id="id_tags" name="tags" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_file">File</label>
+                            <input type="file" id="id_file" name="file" class="form-control-file">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleForm() {
+            $(".article-form").toggle();
+        }
+    </script>
+    <script>
+        CKEDITOR.replace('id_content', {
+            customConfig: '/static/js/ckeditor_config.js',  
+        });
+    </script>
+    
+    
+
+</body>
+</html>
