@@ -109,6 +109,9 @@ def edit_article(request, article_id):
 
     if request.method == 'POST':
         form = ArticleForm(request.POST, request.FILES, instance=article)
+        if (not request.user.is_staff and request.user != article.author):
+            messages.error(request, 'You are not authorized to delete this article .')
+            return redirect('article_detail', article_id=article_id)
         if form.is_valid():
             form.save()
             messages.success(request,"Post Edited Succesfully")
@@ -123,10 +126,13 @@ def delete_article(request, article_id):
     article = get_object_or_404(Article, id=article_id)
     article_title = article.title  
 
-    if request.method == 'POST':
+    if request.method == 'POST' and (request.user.is_staff or request.user == article.author):
         article.delete()
         messages.success(request, f'The article "{article_title}" has been deleted.')
         return redirect('dashboard')
+    elif (not request.user.is_staff and request.user != article.author):
+        messages.error(request, 'You are not authorized to delete this article .')
+        return redirect('article_detail', article_id=article_id)
 
     return render(request, 'delete_article.html', {'article': article})
 
