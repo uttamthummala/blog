@@ -37,4 +37,7 @@ Django Blog CMS is a simple content management system (CMS) built using Django. 
    python manage.py migrate
 6. Run the Development Server:
    ```bash
-   python manage.py runserver# blog
+   python manage.py runserver
+7. Run the Tests:
+   ```bash
+   python manage.py test
