@@ -8,8 +8,7 @@
             display: none;
         }
     </style>
-    <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
-
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
 </head>
 <body>
     {% if messages %}
@@ -24,7 +23,9 @@
     <h2>Welcome to the Blog  <a href="{% url 'dashboard' %}">Dashboard!</a></h2>
 
 
-    <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#articleModal" style="margin-bottom: 5px;">Add a New Article</button>
+    <!-- <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#articleModal" style="margin-bottom: 5px;">Add a New Article</button> -->
+    <a href="{% url 'add_article' %}" class="btn btn-primary" style="flex-direction: column;     position: absolute;
+    right: 20%;">Logout</a>
     <a href="{% url 'logout' %}" class="btn btn-danger" style="flex-direction: column;     position: absolute;
     right: 20%;">Logout</a>
 
@@ -113,8 +114,8 @@
     </div>
     </div>
 
-    <div class="modal" id="articleModal" tabindex="-1" role="dialog" aria-labelledby="articleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <!-- <div class="modal" id="articleModal" tabindex="-1" role="dialog" aria-labelledby="articleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="articleModalLabel">Add a New Article</h5>
@@ -143,26 +144,26 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
-                    
                 </div>
             </div>
         </div>
     </div>
-
+    <script>
+        CKEDITOR.replace('id_content', {
+            customConfig: '/static/js/ckeditor_config.js',  // Adjust the path based on your project
+        });
+    </script> -->
     
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
     <script>
         function toggleForm() {
             $(".article-form").toggle();
         }
     </script>
-    <script>
-        CKEDITOR.replace('id_content', {
-            customConfig: '/static/js/ckeditor_config.js',  
-        });
-    </script>
+
     
     
 

@@ -1,6 +1,6 @@
 # articles/urls.py
 from django.urls import path
-from .views import user_login, user_register, dashboard,article_detail,edit_article,delete_article,user_logout
+from .views import user_login, user_register, dashboard,article_detail,edit_article,delete_article,user_logout,add_article
 
 
 urlpatterns = [
@@ -11,6 +11,7 @@ urlpatterns = [
     path('edit/<int:article_id>/', edit_article, name='edit_article'),
     path('delete/<int:article_id>/', delete_article, name='delete_article'),
     path('logout/', user_logout, name='logout'),
+    path('add/', add_article, name='add_article'),
     path('',user_login,name="default")
     # Add other URLs as needed
 ]

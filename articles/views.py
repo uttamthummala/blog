@@ -136,4 +136,19 @@ def delete_article(request, article_id):
 
     return render(request, 'delete_article.html', {'article': article})
 
-
+@login_required
+def add_article(request):
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.author = request.user
+            article.save()
+            messages.success(request,"Post Succesfull")
+            return redirect('dashboard')
+        else:
+            messages.error(request,form.errors)
+ 
+    else:
+        form = ArticleForm()
+    return render(request, 'new_article.html', {'form': form})
