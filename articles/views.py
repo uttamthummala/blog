@@ -15,7 +15,7 @@ from django.shortcuts import redirect
 @login_required
 def user_logout(request):
     logout(request)
-    messages.success(request,"login Succesfull")
+    messages.success(request,"logout Succesfull")
     return redirect('login') 
 
 def user_login(request):
