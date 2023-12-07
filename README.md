@@ -2,7 +2,7 @@
 # Django Blog CMS
 
 Django Blog CMS is a simple content management system (CMS) built using Django. It allows users to create, edit, and manage blog articles through a web interface.
-
+For Docs Please view Docs.md
 ## Features
 
 - User authentication (register, login, logout)
